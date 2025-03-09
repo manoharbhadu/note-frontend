@@ -3,8 +3,8 @@ import { useState, useEffect } from "react";
 const NoteForm = ({ onSubmit, initialData }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+  const [loading, setLoading] = useState(false); // Loader state
 
-  // When `initialData` changes, update input fields
   useEffect(() => {
     if (initialData) {
       setTitle(initialData.title);
@@ -12,11 +12,15 @@ const NoteForm = ({ onSubmit, initialData }) => {
     }
   }, [initialData]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title || !content) return alert("Title and content are required!");
-    onSubmit({ title, content });
-    setTitle(""); // Clear form after submission
+
+    setLoading(true); // Show loader before API call
+    await onSubmit({ title, content });
+    setLoading(false); // Hide loader after API call
+
+    setTitle("");
     setContent("");
   };
 
@@ -35,8 +39,9 @@ const NoteForm = ({ onSubmit, initialData }) => {
         value={content}
         onChange={(e) => setContent(e.target.value)}
       />
-      <button type="submit" className="bg-black font-semibold cursor-pointer text-white p-2 rounded w-full">
-        {initialData ? "Update Note" : "Add Note"}
+
+      <button type="submit" className="bg-black font-semibold cursor-pointer text-white p-2 rounded w-full" disabled={loading}>
+        {loading ? "Processing..." : initialData ? "Update Note" : "Add Note"}
       </button>
     </form>
   );

@@ -6,29 +6,37 @@ import NoteForm from "./NoteForm";
 const NoteList = () => {
   const [notes, setNotes] = useState([]);
   const [editingNote, setEditingNote] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [deletingId, setDeletingId] = useState(null); // Track which note is being deleted
 
   useEffect(() => {
     fetchNotes();
   }, []);
 
   const fetchNotes = async () => {
+    setLoading(true);
     const data = await getNotes();
     setNotes(data);
+    setLoading(false);
   };
 
   const handleAddNote = async (note) => {
+    setLoading(true);
     await createNote(note);
     fetchNotes();
   };
 
   const handleUpdateNote = async (updatedNote) => {
+    setLoading(true);
     await updateNote(editingNote._id, updatedNote);
-    setEditingNote(null); // Reset after update
+    setEditingNote(null);
     fetchNotes();
   };
 
   const handleDeleteNote = async (id) => {
+    setDeletingId(id); // Show loader for this note
     await deleteNote(id);
+    setDeletingId(null);
     fetchNotes();
   };
 
@@ -51,11 +59,19 @@ const NoteList = () => {
               <p>{note.content}</p>
             </div>
             <div className="flex gap-2">
-              <button onClick={() => setEditingNote(note)} className="cursor-pointer font-semibold border border-gray-300 bg-gray-100 px-3 rounded">
-                Edit
+              <button
+                onClick={() => setEditingNote(note)}
+                className="cursor-pointer font-semibold border border-gray-300 bg-gray-100 px-3 rounded"
+                disabled={loading}
+              >
+                {editingNote && editingNote._id === note._id ? "Editing..." : "Edit"}
               </button>
-              <button onClick={() => handleDeleteNote(note._id)} className="cursor-pointer font-semibold border border-gray-300 text-red-500 bg-gray-100 px-3 rounded">
-                Delete
+              <button
+                onClick={() => handleDeleteNote(note._id)}
+                className="cursor-pointer font-semibold border border-gray-300 text-red-500 bg-gray-100 px-3 rounded"
+                disabled={deletingId === note._id} // Disable button when deleting
+              >
+                {deletingId === note._id ? "Deleting..." : "Delete"}
               </button>
             </div>
           </li>
