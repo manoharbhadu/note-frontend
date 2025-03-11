@@ -1,5 +1,6 @@
 'use client'
 import { login } from '@/api/api';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
@@ -47,7 +48,7 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto mt-12 p-6 bg-white rounded-lg shadow-md">
+        <div className="max-w-md min-w-sm  mx-auto p-6 bg-white rounded-lg border border-gray-300">
             <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -63,7 +64,7 @@ const LoginForm = () => {
                         onChange={handleChange}
                         placeholder="Enter your email"
                         required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none disabled:bg-gray-100"
                         disabled={loading}
                     />
                 </div>
@@ -80,19 +81,22 @@ const LoginForm = () => {
                         onChange={handleChange}
                         placeholder="Enter your password"
                         required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none disabled:bg-gray-100"
                         disabled={loading}
                     />
                 </div>
 
                 <button
                     type="submit"
-                    className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-blue-400 disabled:cursor-not-allowed"
+                    className="w-full bg-black  font-semibold text-white py-2 px-4 rounded-md disabled:cursor-not-allowed"
                     disabled={loading}
                 >
                     {loading ? 'Logging in...' : 'Login'}
                 </button>
             </form>
+            <div className="text-center text-sm mt-2">
+                Don't have an account ?<Link href={'/signup'} className=' underline text-blue-700'> Sign-Up</Link>
+            </div>
 
             {error && (
                 <p className="mt-4 text-red-500 text-center">{error}</p>

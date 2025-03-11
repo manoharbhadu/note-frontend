@@ -19,7 +19,7 @@ export function middleware(request) {
 
     // If trying to access a protected route without a token
     if (isProtectedRoute && !token) {
-        const loginUrl = new URL('/login', request.url);
+        const loginUrl = new URL('/signup', request.url);
         loginUrl.searchParams.set('redirect', pathname); // Preserve intended destination
         return NextResponse.redirect(loginUrl);
     }

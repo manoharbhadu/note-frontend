@@ -1,5 +1,6 @@
 'use client'
 import { signUp } from '@/api/api';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
@@ -34,7 +35,6 @@ const SignUp = () => {
             };
 
             const response = await signUp(userData);
-            document.cookie = `token=${response.token}; path=/; max-age=3600`; 
             setSuccess('User created successfully!');
             setFormData({ email: '', password: '' });
             router.push('/login')
@@ -46,7 +46,7 @@ const SignUp = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto mt-12 p-6 bg-white rounded-lg shadow-md">
+        <div className="max-w-md min-w-sm  mx-auto p-6 bg-white rounded-lg border border-gray-300">
             <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
 
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -62,7 +62,7 @@ const SignUp = () => {
                         onChange={handleChange}
                         placeholder="Enter your email"
                         required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-transparent disabled:bg-gray-100"
                         disabled={loading}
                     />
                 </div>
@@ -79,19 +79,22 @@ const SignUp = () => {
                         onChange={handleChange}
                         placeholder="Enter your password"
                         required
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-100"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none  disabled:bg-gray-100"
                         disabled={loading}
                     />
                 </div>
 
                 <button
                     type="submit"
-                    className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-blue-400 disabled:cursor-not-allowed"
+                    className="w-full bg-black  font-semibold text-white py-2 px-4 rounded-md disabled:cursor-not-allowed"
                     disabled={loading}
                 >
                     {loading ? 'Signing up...' : 'Sign Up'}
                 </button>
             </form>
+            <div className="text-center text-sm mt-2">
+                Already have an account ?<Link href={'/login'} className=' underline text-blue-700'> Login</Link>
+            </div>
 
             {error && (
                 <p className="mt-4 text-red-500 text-center">{error}</p>
