@@ -1,9 +1,11 @@
 'use client'
 import { useState, useEffect } from "react";
-import { getNotes, createNote, updateNote, deleteNote } from "../../api/api";
+import { getNotes, createNote, updateNote, deleteNote } from "../api/api";
 import NoteForm from "./NoteForm";
+import { useRouter } from "next/navigation";
 
 const NoteList = () => {
+  const router = useRouter()
   const [notes, setNotes] = useState([]);
   const [editingNote, setEditingNote] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -40,9 +42,17 @@ const NoteList = () => {
     fetchNotes();
   };
 
+  const handleLogout = () => {
+    document.cookie = 'token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    router.push('/login'); // Redirect to login page after logout
+  };
+
   return (
     <div className="max-w-3xl mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Note Taking App</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl font-bold mb-4">Note Taking App</h1>
+        <button className="bg-black font-semibold cursor-pointer text-white px-2 p-1 rounded" onClick={handleLogout}>logout</button>
+      </div>
 
       {/* Note Form */}
       <NoteForm
